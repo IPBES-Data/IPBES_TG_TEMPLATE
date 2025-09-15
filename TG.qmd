@@ -1,0 +1,188 @@
+---
+title: Technical Guideline Series
+subtitle: TEMPLATE - How To Author a Technical Guideline  
+date: today
+author:
+  - name: 
+        family: Krug
+        given: Rainer M.
+    id: rmk
+    orcid: 0000-0002-7490-0066
+    email: Rainer.Krug@Senckenberg.de, Rainer@Krugs.de
+    affiliation: 
+      - name: Senckenberg
+        city: Frankfurt (Main)
+        url: https://www.senckenberg.de/en/institutes/sbik-f/
+    roles: [author, editor]
+  - name: 
+        family: Gudde
+        given: Renske 
+    id: rg
+    orcid: 0000-0003-4727-1011
+    email: Renske.Gudde@Senckenberg.de
+    affiliation: 
+      - name: Senckenberg
+        city: Frankfurt (Main)
+        url: https://www.senckenberg.de/en/institutes/sbik-f/
+    roles: [editor]
+abstract: TO BE ADDED
+keyword: ["template", "help", "TG"]
+categories: ["tsu", "experts", "assessment"]
+license: "CC BY"
+citation:
+  type: report
+  container-title: "IPBES Technical Guidelines: TEMPLATE - How To Author a Technical Guideline"
+  doi: 10.5281/zenodo.xxxxxxx
+doi: 10.5281/zenodo.xxxxxxxx
+version: 0.1
+
+format:
+    html:
+        toc: true
+        toc-depth: 4
+        toc_expand: true
+        embed-resources: true
+        code-fold: false
+        code-summary: 'Show the code'
+
+execute:
+  eval: false   # default: do not execute code in CI unless explicitly enabled
+---
+
+## Purpose
+This short guide explains how to author a Technical Guideline (TG) using Quarto `.qmd`, how to structure content and code chunks, and how the CI workflow treats R usage and package installation.
+
+
+## What and Why
+One paragraph on objective and scope.
+
+## Inputs and Assumptions
+List required inputs, data sources, and assumptions.
+
+## Steps
+Describe reproducible steps. Add code chunks as needed.
+
+## Metadata in YAML frontmatter
+
+
+Make sure that you fill in all the metadata needed in the YAML frontmatter at the top of the `.qmd` file:
+
+- `title`: Should be "Technical Guideline Series" for all TGs.
+- `subtitle`: The title of the TG.
+- `author`:
+- `abstract`: a short two - three sentence abstract which can be used in the TG Directory page. 
+- `keyword`: A few keywords relevant to the TG.
+- `categories`: These categories are used to identify the audience as well as to group TGs into topics. The audience is categorized into the following groups:
+
+  - **expert**: Relevant for the TF and other IPBES experts
+  - **tsu**: Relevant for the IPBES tsus apart from the assessment tsus
+  - **secretariat**: Relevant for the IPBES secretariat
+  - **assesment_tsu**: Relevant for the assessment tsus
+  - **assesment_experts**: Relevant for the assessment experts
+
+  You can specify multiple groups.
+  In addition, you can use one or more of the following topical categories:
+
+  - **data**: TG is about data management, data analysis, data visualization
+  - **modelling**: TG is about modelling or scenarios
+  - **literature**: TG is about literature search, review, or synthesis
+  - **tools**: TG is about software tools or programming languages
+  - **R**: TG is about the R programming language
+
+  **TODO: These categories nbeed to be finalised**
+
+- `citation`: Fill in the container title following the pattern and update the DOI.
+- `doi`: Obtain a DOI from Zenodo upon publication and update here. This is not a typo, and unfortunately needs to be provided twice.
+- `execute`: use `true` if you have to execute code and load libraries, `false` in all other cases. Default is `false` to avoid long computations or external dependencies during automated builds. 
+
+## Code Chunks (Quarto style)
+- Use Quarto chunk options with the `#|` prefix.
+- Always give chunks descriptive labels: `#| label: load_data`, `#| label: plot_map`.
+- Keep chunks small; one task per chunk.
+
+Example chunk:
+```{r}
+#| label: load_packages_example_one
+#| message: false
+#| warning: false
+library(sf)
+library(ggplot2)
+```
+
+## Evaluation Policy (important for CI)
+- If `eval: false` (see YAML or `knitr::opts_chunk$set(eval = FALSE)`), is set, the code is shown but not run during automated builds. This is useful to avoid long computations or external dependencies. If you need evaluation, set the global option to `true` as only then the necessary packages will be installed. You can disable individual chunks by using `#| eval: false` in the code chunk
+
+```{r}
+#| label: compute_example
+#| eval: false
+
+```
+- Use `message: false` and `warning: false` to keep outputs clean.
+
+## R Usage and Dependencies
+- If you use R, the detector script scans `.qmd` files for `library()`, `require()`, and `pkg::fun` calls and writes the unique package names to `R.pkgs`.
+- CI installs exactly the packages listed in `R.pkgs` only when the global eval is set to true (`execute: eval: true`). When global eval is false, only `knitr` and `rmarkdown` are installed.
+- Prefer explicit `pkg::function` calls in examples so dependencies are discoverable, but also put `library(pkg)` in the first chunk of a section.
+
+## Paths, Data, and Media
+- Use relative paths within the repo (avoid absolute local paths).
+- Place images under `figures/` or next to the `.qmd` and reference them relatively.
+- For external data, provide a stable DOI/URL and briefly document how to obtain it.
+
+## Style and Accessibility
+- Use consistent terminology and capitalization.
+- Prefer color‑blind friendly palettes and add alt text to images.
+- Keep plots legible (titles, units, legends).
+
+## Labels and Cross‑references
+- Label figures and tables; refer to them clearly in text.
+- Keep chunk labels unique and meaningful (no spaces).
+
+## Rendering Locally
+- Detect dependencies (optional but encouraged):
+
+```bash
+bash ./scripts/detect_r_packages.sh TG.qmd
+```
+- Render to HTML alongside the source:
+
+```bash
+quarto render TG.qmd --to html
+```
+
+## Common Patterns
+Load packages with suppressed messages:
+```{r}
+#| label: load_packages_example_two
+#| message: false
+#| warning: false
+library(sf)
+library(dplyr)
+```
+
+Enable a single chunk to evaluate (despite global eval: false):
+```{r}
+#| label: compute_example
+#| eval: true
+result <- 1 + 1
+result
+```
+
+Include an image with alt text (relative path):
+```{r}
+#| label: logo
+#| echo: false
+#| eval: false
+# htmltools::img(src = "figures/logo.png", alt = "IPBES logo", style = "width: 200px;")
+```
+
+## Checklist Before Publishing
+- Title, version, and license set in YAML.
+- Chunk labels present and descriptive; Quarto `#|` options used.
+- Global evaluation policy set (usually `eval: false`).
+- All paths are relative; external links/DOIs included.
+- Document renders locally with `quarto render`.
+- If R is used, `R.pkgs` reflects dependencies (or only knitr+rmarkdown when eval is false).
+
+## Support
+Questions or suggestions: tsu.data@ipbes.net
