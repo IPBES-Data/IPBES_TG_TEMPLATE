@@ -49,6 +49,14 @@ execute:
   eval: false   # default: do not execute code in CI unless explicitly enabled
 ---
 
+## General
+
+the repo contains three branches:
+
+- `main`: the authoritative branch. It is published to the the branch `gh-pages`.
+- `dev`: the development branch. All changes should be made here first, and then merged into `main` **via pull request**.
+- `gh-pages`: the published branch, automatically updated from `main` by GitHub Actions. No actions requitred there from the user side!
+
 ## Purpose
 This short guide explains how to author a Technical Guideline (TG) using Quarto `.qmd`, how to structure content and code chunks, and how the CI workflow treats R usage and package installation.
 
