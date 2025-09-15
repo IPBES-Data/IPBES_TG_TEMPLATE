@@ -27,7 +27,7 @@ author:
     roles: [editor]
 abstract: TO BE ADDED
 keyword: ["template", "help", "TG"]
-categories: ["tsu", "experts", "assessment"]
+categories: ["tsu", "experts", "assessment", "help", "template"]
 license: "CC BY"
 citation:
   type: report

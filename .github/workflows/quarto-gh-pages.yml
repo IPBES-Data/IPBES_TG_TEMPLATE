@@ -19,8 +19,12 @@ jobs:
 
       - name: Detect R usage and packages
         run: |
-          bash ./scripts/detect_r_packages.sh robinson_projection.qmd || true
+          bash ./scripts/detect_r_packages.sh TG.qmd || true
           if [ -f R.pkgs ]; then echo "Detected R packages:"; cat R.pkgs; fi
+
+      - name: Export QMD front matter to metadata_qmd.yaml
+        run: |
+          bash ./scripts/export_frontmatter.sh TG.qmd
 
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -39,10 +43,10 @@ jobs:
           if (length(pkgs)) install.packages(pkgs, repos = "https://cloud.r-project.org")
           RS
 
-      - name: Render robinson_projection.qmd to HTML
+      - name: Render TG.qmd to HTML
         run: |
-          quarto render robinson_projection.qmd --to html --output index.html
-          # quarto render robinson_projection.qmd --to gfm  --output README.md
+          quarto render TG.qmd --to html --output index.html
+          # quarto render TG.qmd --to gfm  --output README.md
 
       # - name: Commit updated README.md to default branch
       #   uses: stefanzweifel/git-auto-commit-action@v5
@@ -56,6 +60,7 @@ jobs:
           mkdir -p public
           cp index.html public/
           if [ -f R.pkgs ]; then cp R.pkgs public/; fi
+          if [ -f metadata_qmd.yaml ]; then cp metadata_qmd.yaml public/; fi
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v3
