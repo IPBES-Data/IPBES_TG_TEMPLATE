@@ -40,7 +40,13 @@ jobs:
         run: |
           Rscript - <<'RS'
           pkgs <- readLines("R.pkgs"); pkgs <- pkgs[nzchar(pkgs)]
-          if (length(pkgs)) install.packages(pkgs, repos = "https://cloud.r-project.org")
+          if (length(pkgs)) {
+            repos <- getOption("repos")
+            if (!nzchar(repos["CRAN"]) && nzchar(Sys.getenv("RSPM"))) {
+              repos["CRAN"] <- Sys.getenv("RSPM")
+            }
+            install.packages(pkgs, repos = repos)
+          }
           RS
 
       - name: Render TG.qmd to HTML
