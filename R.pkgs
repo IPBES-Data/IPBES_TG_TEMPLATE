@@ -1,2 +1,7 @@
+dplyr
+ggplot2
+htmltools
 knitr
+pkg
 rmarkdown
+sf

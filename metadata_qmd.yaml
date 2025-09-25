@@ -1,33 +1,33 @@
 ---
-title: Technical Guideline Series
-subtitle: TEMPLATE - How To Author a Technical Guideline  
+title: "Technical Guideline Series"
+subtitle: "TEMPLATE - How To Author a Technical Guideline"
 date: today
 author:
-  - name: 
-        family: Krug
-        given: Rainer M.
+  - name:
+      family: Krug
+      given: Rainer M.
     id: rmk
     orcid: 0000-0002-7490-0066
     email: Rainer.Krug@Senckenberg.de, Rainer@Krugs.de
-    affiliation: 
+    affiliation:
       - name: Senckenberg
         city: Frankfurt (Main)
         url: https://www.senckenberg.de/en/institutes/sbik-f/
     roles: [author, editor]
-  - name: 
-        family: Gudde
-        given: Renske 
+  - name:
+      family: Gudde
+      given: Renske
     id: rg
     orcid: 0000-0003-4727-1011
     email: Renske.Gudde@Senckenberg.de
-    affiliation: 
+    affiliation:
       - name: Senckenberg
         city: Frankfurt (Main)
         url: https://www.senckenberg.de/en/institutes/sbik-f/
     roles: [editor]
 abstract: TO BE ADDED
 keyword: ["template", "help", "TG"]
-categories: ["tsu", "experts", "assessment", "help", "template"]
+categories: ["expert", "tsu", "template", "tools"] # values to define the audience: expert, tsu, secretariat, assesment_tsu, assesment_experts
 license: "CC BY"
 citation:
   type: report
@@ -37,13 +37,13 @@ doi: 10.5281/zenodo.xxxxxxxx
 version: 0.1
 
 format:
-    html:
-        toc: true
-        toc-depth: 4
-        toc_expand: true
-        embed-resources: true
-        code-fold: false
-        code-summary: 'Show the code'
+  html:
+    toc: true
+    toc-depth: 4
+    toc_expand: true
+    embed-resources: true
+    code-fold: false
+    code-summary: "Show the code"
 
 execute:
   eval: false   # default: do not execute code in CI unless explicitly enabled
