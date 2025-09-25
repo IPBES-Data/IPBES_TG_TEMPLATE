@@ -1,33 +1,33 @@
 ---
-title: Technical Guideline Series
-subtitle: TEMPLATE - How To Author a Technical Guideline  
+title: "Technical Guideline Series"
+subtitle: "TEMPLATE - How To Author a Technical Guideline"
 date: today
 author:
-  - name: 
-        family: Krug
-        given: Rainer M.
+  - name:
+      family: Krug
+      given: Rainer M.
     id: rmk
     orcid: 0000-0002-7490-0066
     email: Rainer.Krug@Senckenberg.de, Rainer@Krugs.de
-    affiliation: 
+    affiliation:
       - name: Senckenberg
         city: Frankfurt (Main)
         url: https://www.senckenberg.de/en/institutes/sbik-f/
     roles: [author, editor]
-  - name: 
-        family: Gudde
-        given: Renske 
+  - name:
+      family: Gudde
+      given: Renske
     id: rg
     orcid: 0000-0003-4727-1011
     email: Renske.Gudde@Senckenberg.de
-    affiliation: 
+    affiliation:
       - name: Senckenberg
         city: Frankfurt (Main)
         url: https://www.senckenberg.de/en/institutes/sbik-f/
     roles: [editor]
 abstract: TO BE ADDED
 keyword: ["template", "help", "TG"]
-categories: ["tsu", "experts", "assessment", "help", "template"]
+categories: ["expert", "tsu", "template", "tools"] # values to define the audience: expert, tsu, secretariat, assesment_tsu, assesment_experts
 license: "CC BY"
 citation:
   type: report
@@ -37,13 +37,13 @@ doi: 10.5281/zenodo.xxxxxxxx
 version: 0.1
 
 format:
-    html:
-        toc: true
-        toc-depth: 4
-        toc_expand: true
-        embed-resources: true
-        code-fold: false
-        code-summary: 'Show the code'
+  html:
+    toc: true
+    toc-depth: 4
+    toc_expand: true
+    embed-resources: true
+    code-fold: false
+    code-summary: "Show the code"
 
 execute:
   eval: false   # default: do not execute code in CI unless explicitly enabled
@@ -51,64 +51,74 @@ execute:
 
 ## General
 
-the repo contains three branches:
+This template repository is designed to be cloned or instantiated through GitHub’s “Use this template” flow. It contains:
 
-- `main`: the authoritative branch. It is published to the the branch `gh-pages`.
-- `dev`: the development branch. All changes should be made here first, and then merged into `main` **via pull request**.
-- `gh-pages`: the published branch, automatically updated from `main` by GitHub Actions. No actions requitred there from the user side!
+- A single Quarto document (`TG.qmd`) that holds both the guidance text and the technical content of the guideline.
+- Utility scripts in `scripts/` used locally and by the GitHub Actions workflow.
+- A publishing workflow that turns `TG.qmd` into a static site on the `gh-pages` branch.
 
-## Purpose
-This short guide explains how to author a Technical Guideline (TG) using Quarto `.qmd`, how to structure content and code chunks, and how the CI workflow treats R usage and package installation.
+Recommended branch model when converting this template into a working TG:
 
+- `dev` – Working branch for day-to-day authoring. Open pull requests against `main` from here.
+- `main` – Source of truth. Merging into `main` triggers the build-and-publish workflow.
+- `gh-pages` – Deployment branch managed entirely by CI. Do not edit this branch manually.
 
-## What and Why
-One paragraph on objective and scope.
+## How to use this template
 
-## Inputs and Assumptions
-List required inputs, data sources, and assumptions.
+1. Create a new repository from the template and clone it locally.
+2. Configure repository secrets (if any) and ensure GitHub Pages is set to build from `gh-pages`.
+3. Update the YAML front matter in `TG.qmd` (see below) and replace every placeholder highlighted as `TO BE ADDED` or similar.
+4. Draft the content directly in `TG.qmd`, replacing the instructional paragraphs with your guideline-specific text.
+5. Preview locally with `quarto render TG.qmd --to html`. If you enable code execution, run `bash scripts/detect_r_packages.sh TG.qmd` to confirm dependencies are listed.
+6. Commit changes, open a pull request against `main`, and merge once reviewed. The GitHub workflow will publish `index.html` to `gh-pages` automatically.
 
-## Steps
-Describe reproducible steps. Add code chunks as needed.
+## Document skeleton
 
-## Metadata in YAML frontmatter
+The sections below are intentionally short so you can overwrite them with your actual content:
 
+- **Purpose** – Explain what the TG addresses and why it matters for IPBES teams. Replace the sample sentence with a concise summary.
+- **What and Why** – Describe the objective, scope, and expected outcomes. Include definitions or context needed for new readers.
+- **Inputs and Assumptions** – List data sources, prerequisites, external tools, and any assumptions the method depends on.
+- **Steps** – Provide the reproducible workflow. Break it into numbered subsections, include code chunks where relevant, and highlight decision points or alternatives.
 
-Make sure that you fill in all the metadata needed in the YAML frontmatter at the top of the `.qmd` file:
+Feel free to introduce additional headings (Background, Case Study, Appendix, etc.) as long as the document remains easy to navigate with the generated table of contents.
 
-- `title`: Should be "Technical Guideline Series" for all TGs.
-- `subtitle`: The title of the TG.
-- `author`:
-- `abstract`: a short two - three sentence abstract which can be used in the TG Directory page. 
-- `keyword`: A few keywords relevant to the TG.
-- `categories`: These categories are used to identify the audience as well as to group TGs into topics. The audience is categorized into the following groups:
+## Metadata in YAML front matter
 
-  - **expert**: Relevant for the TF and other IPBES experts
-  - **tsu**: Relevant for the IPBES tsus apart from the assessment tsus
-  - **secretariat**: Relevant for the IPBES secretariat
-  - **assesment_tsu**: Relevant for the assessment tsus
-  - **assesment_experts**: Relevant for the assessment experts
+Keep the YAML block at the top of this document accurate and machine-readable. Pay special attention to:
 
-  You can specify multiple groups.
-  In addition, you can use one or more of the following topical categories:
+- `subtitle` – Provide the human-readable TG title (e.g. “Part 6 – How to Upload to and Download from Zenodo”).
+- `author` – List all contributors. Each entry can include nested `name` (with `family` and `given`), `id`, `orcid`, `email`, `affiliation`, and `roles`. Remove placeholder information when you add your own.
+- `abstract` – Supply a two- to three-sentence synopsis. This text appears in the global TG directory.
+- `keyword` – Provide a short list of search terms. Use lowercase words without spaces (replace with hyphen if needed).
+- `categories` – Combine audience tags (`expert`, `tsu`, `secretariat`, `assesment_tsu`, `assesment_experts`) with topical tags (for example `data`, `modelling`, `literature`, `tools`, `r`, `template`, …). These audience tags drive icon rendering in the directory.
+- `license` – Default is `CC BY`. Update if the TG requires a different Creative Commons licence.
+- `citation` and `doi` – Update with the final DOI minted via Zenodo. Quarto currently requires the DOI both inside `citation` and at the top level.
+- `version` – Bump the version whenever content changes materially. Follow semantic versioning (`major.minor.patch`) where practical.
+- `date` – Use either a fixed ISO date (`2024-05-17`) or `last-modified` to have Quarto fill it during rendering.
+- `execute.eval` – Leave `false` unless you need runtime evaluation. When set to `true`, CI installs and runs the detected R packages.
 
-  - **data**: TG is about data management, data analysis, data visualization
-  - **modelling**: TG is about modelling or scenarios
-  - **literature**: TG is about literature search, review, or synthesis
-  - **tools**: TG is about software tools or programming languages
-  - **R**: TG is about the R programming language
+## Branching and publishing workflow
 
-  **TODO: These categories nbeed to be finalised**
+The GitHub Actions pipeline (`.github/workflows/quarto-gh-pages.yml`) performs the following steps whenever `main` changes or you trigger it manually:
 
-- `citation`: Fill in the container title following the pattern and update the DOI.
-- `doi`: Obtain a DOI from Zenodo upon publication and update here. This is not a typo, and unfortunately needs to be provided twice.
-- `execute`: use `true` if you have to execute code and load libraries, `false` in all other cases. Default is `false` to avoid long computations or external dependencies during automated builds. 
+1. Detect R usage via `scripts/detect_r_packages.sh`. If no R code is found, CI skips the R toolchain.
+2. Export the YAML front matter into `metadata_qmd.yaml` for downstream indexing.
+3. Install Quarto (and, when required, R plus the packages listed in `R.pkgs`).
+4. Render `TG.qmd` to `index.html`.
+5. Copy `index.html`, `metadata_qmd.yaml`, and any `R.pkgs` manifest into `public/` and publish that directory to `gh-pages` using the `peaceiris/actions-gh-pages` action.
 
-## Code Chunks (Quarto style)
-- Use Quarto chunk options with the `#|` prefix.
-- Always give chunks descriptive labels: `#| label: load_data`, `#| label: plot_map`.
-- Keep chunks small; one task per chunk.
+You can reproduce these steps locally if you want to vet the output before pushing.
+
+## Working with code chunks
+
+- Use Quarto chunk options with the `#|` prefix to control behaviour (`#| label:`, `#| eval:`, `#| echo:`).
+- Keep chunk labels unique and descriptive (`load_data`, `fig_regions`, …) to assist with debugging and cross-referencing.
+- Group related logic into short chunks; long analyses should be split into manageable sections.
+- Suppress noisy console output with `#| message: false` and `#| warning: false` where appropriate.
 
 Example chunk:
+
 ```{r}
 #| label: load_packages_example_one
 #| message: false
@@ -117,49 +127,52 @@ library(sf)
 library(ggplot2)
 ```
 
-## Evaluation Policy (important for CI)
-- If `eval: false` (see YAML or `knitr::opts_chunk$set(eval = FALSE)`), is set, the code is shown but not run during automated builds. This is useful to avoid long computations or external dependencies. If you need evaluation, set the global option to `true` as only then the necessary packages will be installed. You can disable individual chunks by using `#| eval: false` in the code chunk
+### Evaluation policy
+
+- Global evaluation is controlled by the `execute.eval` value in the YAML front matter. Leave it as `false` when you want to ship narrative-only guidance or code snippets that readers run locally.
+- To execute specific chunks even when the global setting is `false`, set `#| eval: true` on that chunk. Conversely, when the global setting is `true`, disable individual chunks with `#| eval: false`.
 
 ```{r}
 #| label: compute_example
 #| eval: false
-
+#| message: false
+# placeholder for computations
 ```
-- Use `message: false` and `warning: false` to keep outputs clean.
 
-## R Usage and Dependencies
-- If you use R, the detector script scans `.qmd` files for `library()`, `require()`, and `pkg::fun` calls and writes the unique package names to `R.pkgs`.
-- CI installs exactly the packages listed in `R.pkgs` only when the global eval is set to true (`execute: eval: true`). When global eval is false, only `knitr` and `rmarkdown` are installed.
-- Prefer explicit `pkg::function` calls in examples so dependencies are discoverable, but also put `library(pkg)` in the first chunk of a section.
+### R usage and dependencies
 
-## Paths, Data, and Media
-- Use relative paths within the repo (avoid absolute local paths).
-- Place images under `figures/` or next to the `.qmd` and reference them relatively.
-- For external data, provide a stable DOI/URL and briefly document how to obtain it.
+- The detector script identifies packages referenced via `library()`, `require()`, `requireNamespace()`, or `pkg::function` calls and writes them to `R.pkgs`.
+- When `R.pkgs` exists and evaluation is enabled, CI installs those packages before rendering. Keep the list clean by removing unused `library()` calls.
+- Prefer explicit `pkg::function` usage in prose chunks so dependencies remain discoverable.
 
-## Style and Accessibility
-- Use consistent terminology and capitalization.
-- Prefer color‑blind friendly palettes and add alt text to images.
-- Keep plots legible (titles, units, legends).
+## Data, media, and references
 
-## Labels and Cross‑references
-- Label figures and tables; refer to them clearly in text.
-- Keep chunk labels unique and meaningful (no spaces).
+- Use relative paths (`figures/map.png`) to ensure assets render on GitHub Pages.
+- Store large data files externally and provide download instructions plus licensing information. Include DOIs or persistent URLs for reproducibility.
+- When embedding images, add alt text either via HTML or chunk options to support accessibility.
+- Cite external resources using standard Markdown footnotes, Pandoc citation keys, or explicit reference lists. Maintain a `references.bib` file if you cite bibliographic entries extensively.
 
-## Rendering Locally
-- Detect dependencies (optional but encouraged):
+## Rendering locally
+
+Run the following commands from the repository root during development:
 
 ```bash
+# Optional: refresh dependency list
 bash ./scripts/detect_r_packages.sh TG.qmd
-```
-- Render to HTML alongside the source:
 
-```bash
+# Render the guideline to HTML
 quarto render TG.qmd --to html
+
+# Update metadata_qmd.yaml for the directory
+bash ./scripts/export_frontmatter.sh TG.qmd
 ```
 
-## Common Patterns
+Inspect the generated `index.html` in a browser before committing.
+
+## Common patterns
+
 Load packages with suppressed messages:
+
 ```{r}
 #| label: load_packages_example_two
 #| message: false
@@ -168,15 +181,17 @@ library(sf)
 library(dplyr)
 ```
 
-Enable a single chunk to evaluate (despite global eval: false):
+Enable a single chunk to evaluate when global evaluation is disabled:
+
 ```{r}
-#| label: compute_example
+#| label: compute_example_enabled
 #| eval: true
 result <- 1 + 1
 result
 ```
 
 Include an image with alt text (relative path):
+
 ```{r}
 #| label: logo
 #| echo: false
@@ -184,13 +199,16 @@ Include an image with alt text (relative path):
 # htmltools::img(src = "figures/logo.png", alt = "IPBES logo", style = "width: 200px;")
 ```
 
-## Checklist Before Publishing
-- Title, version, and license set in YAML.
-- Chunk labels present and descriptive; Quarto `#|` options used.
-- Global evaluation policy set (usually `eval: false`).
-- All paths are relative; external links/DOIs included.
-- Document renders locally with `quarto render`.
-- If R is used, `R.pkgs` reflects dependencies (or only knitr+rmarkdown when eval is false).
+## Checklist before publishing
+
+- YAML metadata is complete (subtitle, authors, abstract, keywords, categories, version, DOI, licence).
+- `metadata_qmd.yaml` regenerated after the final metadata edits.
+- If code runs, `execute.eval` is set appropriately and `R.pkgs` lists all required packages.
+- Figures, tables, and appendices have clear captions and are referenced in the text.
+- All external datasets and tools are cited with stable identifiers.
+- `quarto render TG.qmd --to html` succeeds locally without warnings you intend to keep.
+- Changes merged into `main` and the GitHub Pages build finished successfully (check the workflow run and the live site).
 
 ## Support
+
 Questions or suggestions: tsu.data@ipbes.net
